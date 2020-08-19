@@ -1,0 +1,41 @@
+version: '3.1'
+
+services:
+  drup1:
+    image: drupal
+    ports:
+      - '8080:80'
+    networks:
+      - net2
+    volumes:
+      - drupal-modules:/var/www/html/modules
+      - drupal-profiles:/var/www/html/profiles
+      - drupal-sites:/var/www/html/sites
+      - drupal-themes:/var/www/html/themes
+  psql1:
+    image: postgres:12.1
+    environment:
+      POSTGRES_PASSWORD: 123456
+    networks:
+      - net2
+    volumes:
+      - /home/marcelok/stuff/data-psql:/var/lib/postgresql/data
+  visualizer:
+    image: dockersamples/visualizer
+    ports:
+      - "8000:8080"
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock"
+    deploy:
+      placement:
+        constraints: [node.role == manager]
+
+volumes:
+  drupal-modules:
+  drupal-profiles:
+  drupal-sites:
+  drupal-themes:
+
+networks:
+  net2:
+    driver: overlay

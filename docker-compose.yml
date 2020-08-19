@@ -1,0 +1,35 @@
+version: '2.0'
+
+services:
+  drup1:
+    image: drupal
+    ports:
+      - '8080:80'
+    networks: 
+      - net1
+    volumes:
+      - drupal-modules:/var/www/html/modules
+      - drupal-profiles:/var/www/html/profiles
+      - drupal-sites:/var/www/html/sites
+      - drupal-themes:/var/www/html/themes
+  mysql1:
+    image: mysql:5.7.31
+    networks: 
+      - net1
+    volumes:
+      - /root/data-mysql:/var/lib/mysql
+    environment:
+      - MYSQL_DATABASE=drupal
+      - MYSQL_USER=drup
+      - MYSQL_PASSWORD=drup123
+      - MYSQL_ROOT_PASSWORD=123456
+
+volumes:
+  drupal-modules:
+  drupal-profiles:
+  drupal-sites:
+  drupal-themes:
+
+networks:
+  net1:
+    driver: bridge
